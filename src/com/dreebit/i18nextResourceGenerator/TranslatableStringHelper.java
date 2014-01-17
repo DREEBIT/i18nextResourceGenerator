@@ -11,6 +11,7 @@ public class TranslatableStringHelper {
 
     private String raw;
     private String name;
+    private String key;
     private String namespace;
     private ArrayList<String> keys;
 
@@ -27,16 +28,40 @@ public class TranslatableStringHelper {
         return this.name;
     }
 
-    private void provideAttributes(String string) {
-        Pattern p = Pattern.compile("(.*?)(\\:)(.*)");
-        Matcher m = p.matcher(string);
+    public String getKey() {
+        return this.key;
+    }
 
-        if (m.find()) {
-            this.namespace = m.group(1);
-            this.name = m.group(3);
+    public boolean hasKey() {
+        if(this.key != null && !this.key.isEmpty()){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void provideAttributes(String string) {
+        // find namespace
+        Pattern patternNamespace;
+        Matcher matcherNamespace;
+        patternNamespace = Pattern.compile("(.*)(\\:)(.*)");
+        matcherNamespace = patternNamespace.matcher(string);
+        if (matcherNamespace.find()) {
+            this.namespace = matcherNamespace.group(1);
+            this.name = matcherNamespace.group(3);
         } else {
             this.namespace = UtilKeys.DEFAULT_NAMESPACE;
             this.name = string;
+        }
+
+        //find key
+        Pattern patternKey;
+        Matcher matcherKey;
+        patternKey = Pattern.compile("(.*)(\\.)(.*)");
+        matcherKey = patternKey.matcher(this.name);
+        if (matcherKey.find()) {
+            this.key = matcherKey.group(1);
+            this.name = matcherKey.group(3);
         }
     }
 }

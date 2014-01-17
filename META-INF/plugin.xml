@@ -1,46 +1,55 @@
 <idea-plugin version="2">
-  <id>com.dreebit.i18nextResourceGenerator</id>
-  <name>Plugin display name here</name>
-  <version>1.0</version>
-  <vendor email="github@dreebit.com" url="http://www.dreebit.com">YourCompany</vendor>
+    <id>com.dreebit.i18nextResourceGenerator</id>
+    <name>i18next resource generator</name>
+    <version>1.0</version>
+    <vendor email="github@dreebit.com" url="http://www.dreebit.com">DREEBIT GmbH</vendor>
 
-  <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <small>most HTML tags may be used</small>
-      ]]></description>
-
-  <change-notes><![CDATA[
-      Add change notes here.<br>
-      <small>most HTML tags may be used</small>
+    <description><![CDATA[
+      Resource generator for i18next
+      <ul>
+      <li>Translateable strings should have this format: Locale.get(namespace:key.value)</li>
+      <li>Folder of languages: /resources/i18next/locales/</li>
+      <li>Default placeholder: "" (empty string)</li>
+      </ul>
+      Source code: https://github.com/DREEBIT/i18nextResourceGenerator
       ]]>
-  </change-notes>
+    </description>
 
-  <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
-  <idea-version since-build="107.105"/>
+    <change-notes><![CDATA[
+      Init<br>
+      <small>generate i18next resources</small>
+      ]]>
+    </change-notes>
 
-  <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
-       on how to target different products -->
-  <!-- uncomment to enable plugin in all products
-  <depends>com.intellij.modules.lang</depends>
-  -->
+    <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
+    <idea-version since-build="107.105"/>
 
-  <application-components>
-    <!-- Add your application components here -->
-  </application-components>
+    <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products -->
+    <depends>com.intellij.modules.lang</depends>
 
-  <project-components>
-    <!-- Add your project components here -->
-  </project-components>
 
-  <actions>
-    <!-- Add your actions here -->
-      <action id="com.dreebit.i18nextResourceGenerator.ContextMenu" class="com.dreebit.i18nextResourceGenerator.ContextMenuAction"
-              text="i18next resource generator">
-          <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
-      </action>
-  </actions>
+    <application-components>
+        <!-- Add your application components here -->
+    </application-components>
 
-  <extensions defaultExtensionNs="com.intellij">
-    <!-- Add your extensions here -->
-  </extensions>
+    <project-components>
+        <!-- Add your project components here -->
+    </project-components>
+
+    <actions>
+        <!-- Add your actions here -->
+        <action id="ContextMenu"
+                class="com.dreebit.i18nextResourceGenerator.ContextMenuAction"
+                text="i18next resource generator"
+                description="Generate i18next resources in locals folder.">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+        </action>
+    </actions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+
+    </extensions>
 </idea-plugin>

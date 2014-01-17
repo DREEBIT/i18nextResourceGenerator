@@ -1,15 +1,12 @@
 package com.dreebit.i18nextResourceGenerator;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 
 /**
  * Created by stefanmeschke on 14.01.14.
  */
-public class FileContentProvider {
+public class FileReadWriteProvider {
 
 
     public String getFileContent(File file) throws IOException {
@@ -30,6 +27,22 @@ public class FileContentProvider {
             return fileContents.toString();
         } finally {
             scanner.close();
+        }
+    }
+
+    public void writeFileWithContent(File file, String content) throws IOException {
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(content);
+            bw.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
