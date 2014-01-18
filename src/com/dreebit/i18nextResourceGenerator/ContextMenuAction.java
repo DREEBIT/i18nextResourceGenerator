@@ -14,8 +14,7 @@ import com.intellij.ui.awt.RelativePoint;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,7 +34,6 @@ public class ContextMenuAction extends AnAction {
         UtilKeys.projectBasePath = e.getProject().getBaseDir().getPath();
 
         VirtualFile[] selectedFiles = e.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY);
-        //VirtualFile[] selectedFiles = e.getProject().getBaseDir().getChildren();
 
         allFiles = new ArrayList<File>();
 
@@ -81,7 +79,7 @@ public class ContextMenuAction extends AnAction {
         else
             message = "<strong>Nothing was created</strong>";
 
-        this.showMessage(message);
+        this.showMessage(MessageType.INFO, message);
 
         VirtualFileManager.getInstance().syncRefresh();
     }
@@ -110,10 +108,22 @@ public class ContextMenuAction extends AnAction {
         }
 
         File newFile = new File(UtilKeys.projectBasePath + UtilKeys.RESOURCE_PATH + File.separator + language + File.separator + namespace + ".json");
+        Writer writer = null;
         try {
-            newFile.createNewFile();
+            // newFile.createNewFile();
+
+            writer = new BufferedWriter(new FileWriter(newFile));
+            writer.write("{}");
         } catch (IOException ioException) {
             ioException.printStackTrace();
+        } finally {
+            try {
+                if (writer != null) {
+                    writer.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         return newFile;
@@ -152,7 +162,6 @@ public class ContextMenuAction extends AnAction {
         int index = filename.lastIndexOf('.');
         if (index != -1)
             filename = filename.substring(0, index);
-
         return filename;
     }
 
@@ -165,10 +174,10 @@ public class ContextMenuAction extends AnAction {
         }
     }
 
-    public void showMessage(String htmlText) {
+    public void showMessage(MessageType messageType, String htmlText) {
         StatusBar statusBar = WindowManager.getInstance().getStatusBar(UtilKeys.project);
         JBPopupFactory.getInstance()
-                .createHtmlTextBalloonBuilder(htmlText, MessageType.INFO, null)
+                .createHtmlTextBalloonBuilder(htmlText, messageType, null)
                 .setFadeoutTime(2000)
                 .createBalloon()
                 .show(RelativePoint.getCenterOf(statusBar.getComponent()), Balloon.Position.atLeft);
@@ -200,7 +209,10 @@ public class ContextMenuAction extends AnAction {
                     if(this.isJSONValid(resourceContent)) {
                         jsonObject = new JSONObject(resourceContent);
                     } else {
-                        jsonObject = new JSONObject("{}");
+                        String message = "Given content from File '" + f.getAbsolutePath() + "' is not a valid JSON.";
+                        this.showMessage(MessageType.ERROR, message);
+                        throw new JSONException(message);
+                        // jsonObject = new JSONObject("{}");
                     }
 
                     if(hasKey) {
