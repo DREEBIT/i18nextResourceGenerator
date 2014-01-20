@@ -1,7 +1,41 @@
 i18nextResourceGenerator
 ========================
 
-This plugin is still in development.
+This plugin provides a context menu entry to generate resource files for i18next.
+
+Project Settings
+----------------
+
+Translateable strings should have this format
+
+    Locale.get(namespace:key.value)
+
+Folder of languages
+
+    /resources/i18next/locales/
+
+Default placeholder
+
+    "" (empty string)
+
+Example
+-------
+
+Input:
+
+    Locale.get(app:datatypes.exp),
+    Locale.get(app:nameofmyapp)
+
+Output in folder *lang*:
+    
+    /resources/i18next/locales/lang/app.json
+
+    {
+        "datatypes": {
+            "exp": ""
+        },
+        "nameofmyapp": ""
+    }
 
 ##Licence
 
